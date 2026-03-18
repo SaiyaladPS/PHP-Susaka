@@ -2,6 +2,10 @@
 session_start();
 
 include '../../connection/conn.php';
+include '../../connection/logger.php';
+
+// ບັນທຶກການເຂົ້າຊົມໜ້ານີ້
+logVisitor($conn, $_SESSION['user_id'] ?? null);
 
 $message = "";
 $message_type = "";
@@ -18,22 +22,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "ອີເມວບໍ່ຖືກຕ້ອງ ກະລຸນາລອງໃໝ່";
         $message_type = "error";
     } else {
-        // Use prepared statement for safety
-        $stmt = $conn->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $name, $email, $password, $role);
-
-        if ($stmt->execute()) {
-            $message = "ບັນທືກຂໍ້ມູນສຳເລັດ 🎉";
-            $message_type = "success";
+        // Check if email already exists
+        $check_stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+        $check_stmt->bind_param("s", $email);
+        $check_stmt->execute();
+        $check_stmt->store_result();
+        
+        if ($check_stmt->num_rows > 0) {
+            $message = "ອີເມວນີ້ຖືກໃຊ້ງານແລ້ວ ກະລຸນາໃຊ້ອີເມວອື່ນ";
+            $message_type = "error";
         } else {
-            if ($conn->errno === 1062) {
-                $message = "ອີເມວນີ້ຖືກໃຊ້ງານແລ້ວ ກະລຸນາໃຊ້ອີເມວອື່ນ";
+            // Use prepared statement for safety
+            $stmt = $conn->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("ssss", $name, $email, $password, $role);
+
+            if ($stmt->execute()) {
+                $message = "ບັນທືກຂໍ້ມູນສຳເລັດ 🎉";
+                $message_type = "success";
+                // Clear form data on success
+                $_POST = array();
             } else {
                 $message = "ເກີດຂໍ້ຜິດພາດ: " . $stmt->error;
+                $message_type = "error";
             }
-            $message_type = "error";
+            $stmt->close();
         }
-        $stmt->close();
+        $check_stmt->close();
     }
 }
 

@@ -32,3 +32,29 @@ create table transactions (
     foreign key (account_id) references accounts(id)
 );
 
+-- ຕາຕະລາງບັນທຶກການເຂົ້າຊົມທົ່ວໄປ
+create table visitor_logs (
+    id int auto_increment primary key,
+    ip_address varchar(45),
+    user_agent text,
+    page_url varchar(500),
+    referer varchar(500),
+    session_id varchar(100),
+    user_id int null,
+    created_at timestamp default current_timestamp,
+    foreign key (user_id) references users(id) on delete set null
+);
+
+-- ຕາຕະລາງບັນທຶກການ Login/Logout
+create table auth_logs (
+    id int auto_increment primary key,
+    user_id int null,
+    email varchar(255),
+    action varchar(20) not null, -- login_success | login_failed | logout
+    ip_address varchar(45),
+    user_agent text,
+    status_message varchar(255),
+    created_at timestamp default current_timestamp,
+    foreign key (user_id) references users(id) on delete set null
+);
+

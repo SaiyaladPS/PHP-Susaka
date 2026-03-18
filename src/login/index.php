@@ -2,6 +2,10 @@
 session_start();
 
 include '../../connection/conn.php';
+include '../../connection/logger.php';
+
+// ບັນທຶກການເຂົ້າຊົມໜ້ານີ້
+logVisitor($conn, $_SESSION['user_id'] ?? null);
 
 $message = "";
 $message_type = "";
@@ -28,15 +32,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $_SESSION["user_id"]   = $row["id"];
                 $_SESSION["user_name"] = $row["name"];
                 $_SESSION["user_role"] = $row["role"];
+                
+                // ບັນທຶກການ Login ສຳເລັດ
+                logAuth($conn, 'login_success', $email, $row["id"], 'ເຂົ້າສູ່ລະບົບສຳເລັດ');
+                
                 // header("Location: dashboard.php");
                 // exit;
                 $message = "ເຂົ້າສູ່ລະບົບສຳເລັດ! ຍິນດີຕ້ອນຮັບ " . htmlspecialchars($row["name"]) . " 👋";
                 $message_type = "success";
+
+                header("location: ../account/index.php");
             } else {
+                // ບັນທຶກການ Login ລົ້ມເຫລວ (ລະຫັດຜ່ານຜິດ)
+                logAuth($conn, 'login_failed', $email, null, 'ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ');
+                
                 $message = "ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ ກະລຸນາລອງໃໝ່";
                 $message_type = "error";
             }
         } else {
+            // ບັນທຶກການ Login ລົ້ມເຫລວ (ບໍ່ພົບບັນຊີ)
+            logAuth($conn, 'login_failed', $email, null, 'ບໍ່ພົບບັນຊີນີ້ໃນລະບົບ');
+            
             $message = "ບໍ່ພົບບັນຊີນີ້ໃນລະບົບ";
             $message_type = "error";
         }

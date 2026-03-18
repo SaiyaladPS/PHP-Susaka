@@ -1,0 +1,6 @@
+# Authentication Logs
+# Format: [Timestamp] [Action] [Email] [IP Address] [Status]
+# ========================================
+
+[2026-03-18 13:21:52] login_failed | Unknown | Email: jayj28222@gmail.com | IP: ::1 | Status: ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ
+[2026-03-18 13:22:09] login_success | User ID: 3 | Email: jayj28222@gmail.com | IP: ::1 | Status: ເຂົ້າສູ່ລະບົບສຳເລັດ
