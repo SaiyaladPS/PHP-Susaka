@@ -1,16 +1,7 @@
 <?php
 session_start();
 
-$host = "db";
-$user = "root";
-$pass = "96778932";
-$db   = "not_db";
-
-$conn = new mysqli($host, $user, $pass, $db);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include '../../connection/conn.php';
 
 $message = "";
 $message_type = "";
@@ -61,12 +52,15 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ເຂົ້າສູ່ລະບົບ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100..900&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Noto Sans Lao', sans-serif;
         }
 
         :root {
@@ -87,17 +81,29 @@ $conn->close();
             --transition: 0.2s ease;
         }
 
+        .noto-sans-lao-<uniquifier> {
+            font-family: "Noto Sans Lao", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: <weight>;
+            font-style: normal;
+            font-variation-settings:
+                "wdth" 100;
+        }
+
         body {
-            font-family: 'Outfit', sans-serif;
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px;
+            padding: 16px;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+        }
+        
+        @media (min-width: 640px) {
+            body { padding: 24px; }
         }
 
         body::before {
@@ -138,8 +144,8 @@ $conn->close();
         .card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 48px 44px;
+            border-radius: 16px;
+            padding: 28px 20px;
             width: 100%;
             max-width: 440px;
             position: relative;
@@ -149,6 +155,20 @@ $conn->close();
                 0 32px 80px rgba(0,0,0,0.5),
                 0 0 60px var(--accent-glow);
             animation: slideUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+        }
+        
+        @media (min-width: 480px) {
+            .card {
+                padding: 36px 32px;
+                border-radius: 20px;
+            }
+        }
+        
+        @media (min-width: 640px) {
+            .card {
+                padding: 48px 44px;
+                border-radius: 24px;
+            }
         }
 
         @keyframes slideUp {
@@ -167,20 +187,37 @@ $conn->close();
         /* Header */
         .card-header {
             text-align: center;
-            margin-bottom: 36px;
+            margin-bottom: 24px;
+        }
+        
+        @media (min-width: 480px) {
+            .card-header { margin-bottom: 32px; }
+        }
+        
+        @media (min-width: 640px) {
+            .card-header { margin-bottom: 36px; }
         }
 
         .logo-wrap {
-            width: 64px;
-            height: 64px;
+            width: 56px;
+            height: 56px;
             background: linear-gradient(135deg, var(--accent), #4f46e5);
-            border-radius: 20px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 22px;
+            margin: 0 auto 18px;
             box-shadow: 0 8px 32px var(--accent-glow);
             position: relative;
+        }
+        
+        @media (min-width: 640px) {
+            .logo-wrap {
+                width: 64px;
+                height: 64px;
+                border-radius: 20px;
+                margin-bottom: 22px;
+            }
         }
 
         .logo-wrap::after {
@@ -193,34 +230,73 @@ $conn->close();
         }
 
         .logo-wrap svg {
-            width: 30px;
-            height: 30px;
+            width: 26px;
+            height: 26px;
             fill: white;
+        }
+        
+        @media (min-width: 640px) {
+            .logo-wrap svg {
+                width: 30px;
+                height: 30px;
+            }
         }
 
         h2 {
-            font-size: 1.65rem;
+            font-size: 1.4rem;
             font-weight: 700;
             letter-spacing: -0.025em;
         }
+        
+        @media (min-width: 480px) {
+            h2 { font-size: 1.5rem; }
+        }
+        
+        @media (min-width: 640px) {
+            h2 { font-size: 1.65rem; }
+        }
 
         .subtitle {
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             margin-top: 6px;
+        }
+        
+        @media (min-width: 480px) {
+            .subtitle { font-size: 0.85rem; }
+        }
+        
+        @media (min-width: 640px) {
+            .subtitle { font-size: 0.875rem; }
         }
 
         /* Alert */
         .alert {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 13px 16px;
+            gap: 8px;
+            padding: 12px 14px;
             border-radius: var(--radius);
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             font-weight: 500;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
             animation: fadeIn 0.3s ease;
+        }
+        
+        @media (min-width: 480px) {
+            .alert {
+                gap: 10px;
+                padding: 13px 16px;
+                font-size: 0.85rem;
+                margin-bottom: 26px;
+            }
+        }
+        
+        @media (min-width: 640px) {
+            .alert {
+                font-size: 0.875rem;
+                margin-bottom: 28px;
+            }
         }
 
         @keyframes fadeIn {
@@ -273,15 +349,29 @@ $conn->close();
 
         input {
             width: 100%;
-            padding: 13px 44px 13px 42px;
+            padding: 12px 40px 12px 38px;
             background: var(--surface-2);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             color: var(--text);
             font-family: 'Outfit', sans-serif;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             outline: none;
             transition: border-color var(--transition), box-shadow var(--transition);
+        }
+        
+        @media (min-width: 480px) {
+            input {
+                padding: 13px 42px 13px 40px;
+                font-size: 0.92rem;
+            }
+        }
+        
+        @media (min-width: 640px) {
+            input {
+                padding: 13px 44px 13px 42px;
+                font-size: 0.95rem;
+            }
         }
 
         input::placeholder { color: var(--text-muted); }
@@ -315,6 +405,12 @@ $conn->close();
             align-items: center;
             justify-content: space-between;
             margin-top: 6px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        @media (min-width: 400px) {
+            .form-footer-row { flex-wrap: nowrap; }
         }
 
         .remember-wrap {
@@ -334,15 +430,32 @@ $conn->close();
         }
 
         .remember-wrap span {
-            font-size: 0.83rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
+        }
+        
+        @media (min-width: 480px) {
+            .remember-wrap span { font-size: 0.8rem; }
+        }
+        
+        @media (min-width: 640px) {
+            .remember-wrap span { font-size: 0.83rem; }
         }
 
         .forgot-link {
-            font-size: 0.83rem;
+            font-size: 0.78rem;
             color: var(--accent-light);
             text-decoration: none;
             transition: color var(--transition);
+            white-space: nowrap;
+        }
+        
+        @media (min-width: 480px) {
+            .forgot-link { font-size: 0.8rem; }
+        }
+        
+        @media (min-width: 640px) {
+            .forgot-link { font-size: 0.83rem; }
         }
 
         .forgot-link:hover { color: white; }
@@ -350,21 +463,29 @@ $conn->close();
         /* Submit button */
         .btn-submit {
             width: 100%;
-            padding: 15px;
+            padding: 14px;
             background: linear-gradient(135deg, var(--accent) 0%, #4f46e5 100%);
             color: white;
             border: none;
             border-radius: var(--radius);
             font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 26px;
+            margin-top: 22px;
             position: relative;
             overflow: hidden;
             transition: transform var(--transition), box-shadow var(--transition);
             box-shadow: 0 4px 20px var(--accent-glow);
             letter-spacing: 0.02em;
+        }
+        
+        @media (min-width: 640px) {
+            .btn-submit {
+                padding: 15px;
+                font-size: 1rem;
+                margin-top: 26px;
+            }
         }
 
         .btn-submit::after {
@@ -383,6 +504,13 @@ $conn->close();
 
         .btn-submit:hover::after { opacity: 1; }
         .btn-submit:active { transform: translateY(0); }
+        
+        @media (hover: none) {
+            .btn-submit:hover {
+                transform: none;
+                box-shadow: 0 4px 20px var(--accent-glow);
+            }
+        }
 
         .btn-inner {
             display: flex;
@@ -412,8 +540,16 @@ $conn->close();
         /* Register link */
         .register-link {
             text-align: center;
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
+        }
+        
+        @media (min-width: 480px) {
+            .register-link { font-size: 0.85rem; }
+        }
+        
+        @media (min-width: 640px) {
+            .register-link { font-size: 0.875rem; }
         }
 
         .register-link a {

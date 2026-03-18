@@ -1,14 +1,7 @@
 <?php
-$host = "db";
-$user = "root";
-$pass = "96778932";
-$db   = "not_db";
+session_start();
 
-$conn = new mysqli($host, $user, $pass, $db);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include '../../connection/conn.php';
 
 $message = "";
 $message_type = "";
@@ -52,12 +45,15 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ເພຶ່ມຜູ້ໃຊ້ງານ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100..900&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Noto Sans Lao', sans-serif;
         }
 
         :root {
@@ -78,17 +74,29 @@ $conn->close();
             --transition: 0.2s ease;
         }
 
+        .noto-sans-lao-<uniquifier> {
+            font-family: "Noto Sans Lao", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: <weight>;
+            font-style: normal;
+            font-variation-settings:
+                "wdth" 100;
+        }
+
         body {
-            font-family: 'Outfit', sans-serif;
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px;
+            padding: 16px;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+        }
+        
+        @media (min-width: 768px) {
+            body { padding: 24px; }
         }
 
         /* Background effects */
@@ -124,8 +132,8 @@ $conn->close();
         .card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 48px 44px;
+            border-radius: 16px;
+            padding: 28px 20px;
             width: 100%;
             max-width: 460px;
             position: relative;
@@ -135,6 +143,20 @@ $conn->close();
                 0 32px 80px rgba(0,0,0,0.5),
                 0 0 60px var(--accent-glow);
             animation: slideUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+        }
+        
+        @media (min-width: 480px) {
+            .card {
+                padding: 36px 32px;
+                border-radius: 20px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .card {
+                padding: 48px 44px;
+                border-radius: 24px;
+            }
         }
 
         @keyframes slideUp {
@@ -153,52 +175,119 @@ $conn->close();
         }
 
         .card-header {
-            margin-bottom: 36px;
+            margin-bottom: 24px;
             text-align: center;
+        }
+        
+        @media (min-width: 480px) {
+            .card-header { margin-bottom: 32px; }
+        }
+        
+        @media (min-width: 768px) {
+            .card-header { margin-bottom: 36px; }
         }
 
         .icon-wrap {
-            width: 56px;
-            height: 56px;
+            width: 48px;
+            height: 48px;
             background: linear-gradient(135deg, var(--accent), #4f46e5);
-            border-radius: 16px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
+            margin: 0 auto 16px;
             box-shadow: 0 8px 24px var(--accent-glow);
+        }
+        
+        @media (min-width: 480px) {
+            .icon-wrap {
+                width: 52px;
+                height: 52px;
+                margin-bottom: 18px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .icon-wrap {
+                width: 56px;
+                height: 56px;
+                border-radius: 16px;
+                margin-bottom: 20px;
+            }
         }
 
         .icon-wrap svg {
-            width: 26px;
-            height: 26px;
+            width: 22px;
+            height: 22px;
             fill: white;
+        }
+        
+        @media (min-width: 768px) {
+            .icon-wrap svg {
+                width: 26px;
+                height: 26px;
+            }
         }
 
         h2 {
-            font-size: 1.6rem;
+            font-size: 1.35rem;
             font-weight: 700;
             letter-spacing: -0.02em;
             color: var(--text);
         }
+        
+        @media (min-width: 480px) {
+            h2 { font-size: 1.5rem; }
+        }
+        
+        @media (min-width: 768px) {
+            h2 { font-size: 1.6rem; }
+        }
 
         .subtitle {
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             margin-top: 6px;
+            line-height: 1.4;
+        }
+        
+        @media (min-width: 480px) {
+            .subtitle { font-size: 0.85rem; }
+        }
+        
+        @media (min-width: 768px) {
+            .subtitle { font-size: 0.875rem; }
         }
 
         /* Alert messages */
         .alert {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 16px;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 12px 14px;
             border-radius: var(--radius);
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             font-weight: 500;
-            margin-bottom: 28px;
+            margin-bottom: 20px;
             animation: fadeIn 0.3s ease;
+            line-height: 1.4;
+        }
+        
+        @media (min-width: 480px) {
+            .alert {
+                align-items: center;
+                gap: 10px;
+                padding: 14px 16px;
+                font-size: 0.85rem;
+                margin-bottom: 24px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .alert {
+                font-size: 0.875rem;
+                margin-bottom: 28px;
+            }
         }
 
         @keyframes fadeIn {
@@ -222,17 +311,36 @@ $conn->close();
 
         /* Form */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+        }
+        
+        @media (min-width: 480px) {
+            .form-group { margin-bottom: 18px; }
+        }
+        
+        @media (min-width: 768px) {
+            .form-group { margin-bottom: 20px; }
         }
 
         label {
             display: block;
-            font-size: 0.82rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.06em;
-            margin-bottom: 8px;
+            margin-bottom: 7px;
+        }
+        
+        @media (min-width: 480px) {
+            label { font-size: 0.78rem; }
+        }
+        
+        @media (min-width: 768px) {
+            label {
+                font-size: 0.82rem;
+                margin-bottom: 8px;
+            }
         }
 
         .input-wrap {
@@ -241,27 +349,45 @@ $conn->close();
 
         .input-icon {
             position: absolute;
-            left: 14px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
             pointer-events: none;
             transition: color var(--transition);
         }
+        
+        @media (min-width: 768px) {
+            .input-icon { left: 14px; }
+        }
 
         input, select {
             width: 100%;
-            padding: 13px 14px 13px 42px;
+            padding: 12px 12px 12px 38px;
             background: var(--surface-2);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             color: var(--text);
             font-family: 'Outfit', sans-serif;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             outline: none;
             transition: border-color var(--transition), box-shadow var(--transition);
             appearance: none;
             -webkit-appearance: none;
+        }
+        
+        @media (min-width: 480px) {
+            input, select {
+                padding: 12px 13px 12px 40px;
+                font-size: 0.92rem;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            input, select {
+                padding: 13px 14px 13px 42px;
+                font-size: 0.95rem;
+            }
         }
 
         input::placeholder { color: var(--text-muted); }
@@ -298,7 +424,11 @@ $conn->close();
         .role-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 8px;
+        }
+        
+        @media (min-width: 480px) {
+            .role-grid { gap: 10px; }
         }
 
         .role-option {
@@ -315,19 +445,35 @@ $conn->close();
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
-            padding: 14px 10px;
+            gap: 4px;
+            padding: 10px 6px;
             background: var(--surface-2);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             cursor: pointer;
             transition: all var(--transition);
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 600;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.04em;
             user-select: none;
+        }
+        
+        @media (min-width: 480px) {
+            .role-label {
+                gap: 5px;
+                padding: 12px 8px;
+                font-size: 0.75rem;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .role-label {
+                gap: 6px;
+                padding: 14px 10px;
+                font-size: 0.8rem;
+            }
         }
 
         .role-label:hover {
@@ -343,27 +489,51 @@ $conn->close();
         }
 
         .role-label .role-icon {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
+        }
+        
+        @media (min-width: 480px) {
+            .role-label .role-icon { font-size: 1.2rem; }
+        }
+        
+        @media (min-width: 768px) {
+            .role-label .role-icon { font-size: 1.3rem; }
         }
 
         /* Submit button */
         .btn-submit {
             width: 100%;
-            padding: 15px;
+            padding: 13px;
             background: linear-gradient(135deg, var(--accent) 0%, #4f46e5 100%);
             color: white;
             border: none;
             border-radius: var(--radius);
             font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
+            font-size: 0.92rem;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 28px;
+            margin-top: 20px;
             position: relative;
             overflow: hidden;
             transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
             box-shadow: 0 4px 20px var(--accent-glow);
             letter-spacing: 0.02em;
+        }
+        
+        @media (min-width: 480px) {
+            .btn-submit {
+                padding: 14px;
+                font-size: 0.96rem;
+                margin-top: 24px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .btn-submit {
+                padding: 15px;
+                font-size: 1rem;
+                margin-top: 28px;
+            }
         }
 
         .btn-submit::after {
@@ -393,19 +563,68 @@ $conn->close();
         .divider {
             height: 1px;
             background: var(--border);
-            margin: 28px 0 0;
+            margin: 20px 0 0;
+        }
+        
+        @media (min-width: 480px) {
+            .divider { margin: 24px 0 0; }
+        }
+        
+        @media (min-width: 768px) {
+            .divider { margin: 28px 0 0; }
         }
 
         .footer-note {
             text-align: center;
-            font-size: 0.78rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
-            margin-top: 16px;
+            margin-top: 12px;
+            line-height: 1.4;
+            padding: 0 8px;
+        }
+        
+        @media (min-width: 480px) {
+            .footer-note {
+                font-size: 0.74rem;
+                margin-top: 14px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .footer-note {
+                font-size: 0.78rem;
+                margin-top: 16px;
+                padding: 0;
+            }
         }
 
         .footer-note span {
             color: var(--accent-light);
         }
+
+        /* Register link */
+        .register-link {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        @media (min-width: 480px) {
+            .register-link { font-size: 0.85rem; }
+        }
+        
+        @media (min-width: 640px) {
+            .register-link { font-size: 0.875rem; }
+        }
+
+        .register-link a {
+            color: var(--accent-light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color var(--transition);
+        }
+
+        .register-link a:hover { color: white; }
     </style>
 </head>
 <body>
@@ -511,10 +730,13 @@ $conn->close();
                 ບັນທຶກຜູ້ໃຊ້ງານ
             </span>
         </button>
-
     </form>
 
     <div class="divider"></div>
+            <p class="register-link">
+            ທ່ານມີບິນຊີແລ້ວບໍ?
+            <a href="../login/index.php">ເຂົ້າສູ່ລະບົບ</a>
+        </p>
     <p class="footer-note">ຂໍ້ມູນທັງໝົດຖືກເຂົ້າລະຫັດດ້ວຍ <span>bcrypt</span> ຢ່າງປອດໄພ</p>
 </div>
 

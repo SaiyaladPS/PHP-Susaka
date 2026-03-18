@@ -1,8 +1,3 @@
 <?php
-    function Systemc($HI) {
-        echo $HI;
-    }
-
-    Systemc("Hi Holle Wlid");
-    
+header("location: src/login/index.php");
 ?>
