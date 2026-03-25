@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-include '../connection/conn.php';
-include '../connection/logger.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/logger.php';
 
 // ບັນທຶກການ Logout
 if (isset($_SESSION['user_id'])) {

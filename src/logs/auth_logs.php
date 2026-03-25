@@ -1,19 +1,16 @@
 <?php
 session_start();
-require_once '../../connection/conn.php';
-require_once '../../connection/logger.php';
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../includes/logger.php';
 
-// ບັນທຶກການເຂົ້າຊົມໜ້ານີ້
 logVisitor($conn, $_SESSION['user_id'] ?? null);
 
-// ກວດສອບສິດເຂົ້າເຖິງ (ຕ້ອງເປັນ admin)
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-    header("Location: ../login/index.php");
+    header("Location: /src/login/index.php");
     exit;
 }
 
-// ດຶງຂໍ້ມູນ logs Login/Logout
-$page = $_GET['page'] ?? 1;
+$page = max(1, (int)($_GET['page'] ?? 1));
 $limit = 50;
 $offset = ($page - 1) * $limit;
 
@@ -25,19 +22,113 @@ $logs = $conn->query("
     LIMIT $limit OFFSET $offset
 ");
 
-// ນັບຈຳນວນທັງໝົດ
-$total_result = $conn->query("SELECT COUNT(*) as total FROM auth_logs");
-$total = $total_result->fetch_assoc()['total'];
-$total_pages = ceil($total / $limit);
+$total = (int)$conn->query("SELECT COUNT(*) AS c FROM auth_logs")->fetch_assoc()['c'];
+$total_pages = (int)ceil($total / $limit);
 
-// ສະຖິຕິ
-$stats = $conn->query("
+$log_stats = $conn->query("
     SELECT 
-        SUM(CASE WHEN action = 'login_success' THEN 1 ELSE 0 END) as success_count,
-        SUM(CASE WHEN action = 'login_failed' THEN 1 ELSE 0 END) as failed_count,
-        SUM(CASE WHEN action = 'logout' THEN 1 ELSE 0 END) as logout_count
+        SUM(action = 'login_success') AS success_count,
+        SUM(action = 'login_failed')  AS failed_count,
+        SUM(action = 'logout')        AS logout_count
     FROM auth_logs
 ")->fetch_assoc();
+
+$page_title = 'ບັນທຶກ Login/Logout';
+$active_nav = 'auth-logs';
+require_once __DIR__ . '/../../includes/layout/header.php';
+?>
+
+<!-- Stat Cards -->
+<div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:24px;">
+    <div class="stat-card green">
+        <div class="stat-icon green">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+            </svg>
+        </div>
+        <div class="stat-body">
+            <div class="label">Login ສຳເລັດ</div>
+            <div class="value"><?= number_format($log_stats['success_count']) ?></div>
+        </div>
+    </div>
+    <div class="stat-card red">
+        <div class="stat-icon red">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </div>
+        <div class="stat-body">
+            <div class="label">Login ລົ້ມເຫລວ</div>
+            <div class="value"><?= number_format($log_stats['failed_count']) ?></div>
+        </div>
+    </div>
+    <div class="stat-card yellow">
+        <div class="stat-icon yellow">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7"/>
+            </svg>
+        </div>
+        <div class="stat-body">
+            <div class="label">Logout</div>
+            <div class="value"><?= number_format($log_stats['logout_count']) ?></div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            ທັງໝົດ <?= number_format($total) ?> ລາຍການ
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th><th>ຜູ້ໃຊ້</th><th>ອີເມວ</th>
+                    <th>ການກະທຳ</th><th>IP</th><th>ຂໍ້ຄວາມ</th><th>ເວລາ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($log = $logs->fetch_assoc()): ?>
+                <tr>
+                    <td><?= $log['id'] ?></td>
+                    <td><?= $log['user_name'] ? htmlspecialchars($log['user_name']) : '<span style="color:var(--text-muted)">-</span>' ?></td>
+                    <td><?= htmlspecialchars($log['email']) ?></td>
+                    <td>
+                        <?php if ($log['action'] === 'login_success'): ?>
+                            <span class="badge badge-success">Login ສຳເລັດ</span>
+                        <?php elseif ($log['action'] === 'login_failed'): ?>
+                            <span class="badge badge-error">Login ລົ້ມເຫລວ</span>
+                        <?php else: ?>
+                            <span class="badge badge-muted">Logout</span>
+                        <?php endif; ?>
+                    </td>
+                    <td><?= htmlspecialchars($log['ip_address']) ?></td>
+                    <td><?= htmlspecialchars($log['status_message']) ?></td>
+                    <td style="color:var(--text-muted);white-space:nowrap;"><?= date('d/m/Y H:i', strtotime($log['created_at'])) ?></td>
+                </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <?php if ($total_pages > 1): ?>
+    <div class="pagination">
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+            <a href="?page=<?= $i ?>" class="<?= $page == $i ? 'active' : '' ?>"><?= $i ?></a>
+        <?php endfor; ?>
+    </div>
+    <?php endif; ?>
+</div>
+
+<?php
+$conn->close();
+require_once __DIR__ . '/../../includes/layout/footer.php';
 ?>
 <!DOCTYPE html>
 <html lang="lo">
