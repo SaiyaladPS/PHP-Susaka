@@ -1,0 +1,30 @@
+### Get all users
+GET http://localhost:8080/src/api/users.php
+
+### Get single user by ID
+GET http://localhost:8080/src/api/users.php?id=3
+
+### Create new user
+POST http://localhost:8080/src/api/users.php
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "role": "user"
+}
+
+### Update user
+PUT http://localhost:8080/src/api/users.php
+Content-Type: application/json
+
+{
+  "id": 4,
+  "name": "John Updated",
+  "email": "john.updated@example.com",
+  "role": "staff"
+}
+
+### Delete user
+DELETE http://localhost:8080/src/api/users.php?id=4
