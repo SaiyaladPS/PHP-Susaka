@@ -17,3 +17,13 @@
 [2026-03-25 12:54:57] logout | User ID: 2 | Email: hctsvn6@gmail.com | IP: 192.168.65.1 | Status: ອອກຈາກລະບົບສຳເລັດ
 [2026-03-25 12:55:06] login_success | User ID: 1 | Email: jayj28222@gmail.com | IP: 192.168.65.1 | Status: ເຂົ້າສູ່ລະບົບສຳເລັດ
 [2026-04-22 13:05:59] login_success | User ID: 3 | Email: jayj28222@gmail.com | IP: ::1 | Status: ເຂົ້າສູ່ລະບົບສຳເລັດ
+[2026-05-06 11:43:48] login_failed | Unknown | Email: admin@example.com | IP: 172.19.0.1 | Status: ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ
+[2026-05-06 11:43:53] login_failed | Unknown | Email: admin@example.com | IP: 172.19.0.1 | Status: ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ
+[2026-05-06 11:49:54] login_failed | Unknown | Email: admin@example.com | IP: 172.19.0.1 | Status: ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ
+[2026-05-06 11:51:46] login_failed | Unknown | Email: admin@example.com | IP: 172.19.0.1 | Status: ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ
+[2026-05-06 11:52:40] login_success | User ID: 1 | Email: admin@example.com | IP: 172.19.0.1 | Status: ເຂົ້າສູ່ລະບົບສຳເລັດ
+[2026-05-06 11:52:56] login_success | User ID: 1 | Email: admin@example.com | IP: 172.19.0.1 | Status: ເຂົ້າສູ່ລະບົບສຳເລັດ
+[2026-05-06 11:53:01] logout | User ID: 1 | Email: admin@example.com | IP: 172.19.0.1 | Status: ອອກຈາກລະບົບສຳເລັດ
+[2026-05-06 11:53:08] login_failed | Unknown | Email: admin@example.coma | IP: 172.19.0.1 | Status: ບໍ່ພົບບັນຊີນີ້ໃນລະບົບ
+[2026-05-06 11:53:16] login_failed | Unknown | Email: admin@example.coma | IP: 172.19.0.1 | Status: ບໍ່ພົບບັນຊີນີ້ໃນລະບົບ
+[2026-05-06 11:53:21] login_success | User ID: 1 | Email: admin@example.com | IP: 172.19.0.1 | Status: ເຂົ້າສູ່ລະບົບສຳເລັດ

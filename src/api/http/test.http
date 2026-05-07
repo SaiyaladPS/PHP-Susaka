@@ -1,11 +1,11 @@
 ### Get all users
-GET http://localhost:8080/src/api/users.php
+GET http://localhost/src/api/users.php
 
 ### Get single user by ID
-GET http://localhost:8080/src/api/users.php?id=3
+GET http://localhost/src/api/users.php?id=3
 
 ### Create new user
-POST http://localhost:8080/src/api/users.php
+POST http://localhost/src/api/users.php
 Content-Type: application/json
 
 {
@@ -16,7 +16,7 @@ Content-Type: application/json
 }
 
 ### Update user
-PUT http://localhost:8080/src/api/users.php
+PUT http://localhost/src/api/users.php
 Content-Type: application/json
 
 {
@@ -27,4 +27,4 @@ Content-Type: application/json
 }
 
 ### Delete user
-DELETE http://localhost:8080/src/api/users.php?id=4
+DELETE http://localhost/src/api/users.php?id=4

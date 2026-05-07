@@ -100,15 +100,6 @@ $conn->close();
             --transition: 0.2s ease;
         }
 
-        .noto-sans-lao-<uniquifier> {
-            font-family: "Noto Sans Lao", sans-serif;
-            font-optical-sizing: auto;
-            font-weight: <weight>;
-            font-style: normal;
-            font-variation-settings:
-                "wdth" 100;
-        }
-
         body {
             background: var(--bg);
             color: var(--text);

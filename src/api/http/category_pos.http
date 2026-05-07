@@ -1,0 +1,35 @@
+@baseUrl = http://localhost
+
+### Get POS categories
+GET {{baseUrl}}/src/api/pos_category.php
+
+### Get category by database ID
+GET {{baseUrl}}/src/api/pos_category.php?id=2
+
+### Get category by slug
+GET {{baseUrl}}/src/api/pos_category.php?slug=coffee
+
+### Create category
+POST {{baseUrl}}/src/api/pos_category.php
+Content-Type: application/json
+
+{
+  "slug": "tea",
+  "name": "Tea",
+  "icon": "fa-mug-saucer",
+  "color": "#22C55E"
+}
+
+### Update category
+PUT {{baseUrl}}/src/api/pos_category.php
+Content-Type: application/json
+
+{
+  "id": 8,
+  "name": "Tea & Infusions",
+  "icon": "fa-leaf",
+  "color": "#16A34A"
+}
+
+### Delete category
+DELETE {{baseUrl}}/src/api/pos_category.php?id=8

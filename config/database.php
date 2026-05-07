@@ -3,10 +3,10 @@ class Database {
     private static $instance = null;
     private $connection;
     
-    private $host = "localhost";
+    private $host = "db";
     private $user = "root";
-    private $pass = "";
-    private $db = "not_db";
+    private $pass = "96778932";
+    private $db = "db_not";
     
     private function __construct() {
         $this->connection = new mysqli($this->host, $this->user, $this->pass, $this->db);

@@ -1,0 +1,39 @@
+@baseUrl = http://localhost
+
+### Get POS products
+GET {{baseUrl}}/src/api/pos_product.php
+
+### Get products by category slug
+GET {{baseUrl}}/src/api/pos_product.php?category=coffee
+
+### Search products
+GET {{baseUrl}}/src/api/pos_product.php?search=latte
+
+### Get product by ID
+GET {{baseUrl}}/src/api/pos_product.php?id=4
+
+### Create product
+POST {{baseUrl}}/src/api/pos_product.php
+Content-Type: application/json
+
+{
+  "name": "Matcha Latte",
+  "price": 5.75,
+  "cat": "coffee",
+  "image_url": "https://picsum.photos/seed/matcha-latte/200/200"
+}
+
+### Update product
+PUT {{baseUrl}}/src/api/pos_product.php
+Content-Type: application/json
+
+{
+  "id": 33,
+  "name": "Iced Matcha Latte",
+  "price": 6.25,
+  "cat": "coffee",
+  "image_url": "https://picsum.photos/seed/iced-matcha-latte/200/200"
+}
+
+### Delete product
+DELETE {{baseUrl}}/src/api/pos_product.php?id=33
